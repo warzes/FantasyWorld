@@ -75,15 +75,15 @@ namespace se::Private
 	};
 
 	// check T1 is convertible into T2.
-	template <typename T1, typename T2> struct ConversionTest
+	template <typename T1, typename T2> 
+	struct ConversionTest
 	{
 		template <typename U> struct _IsPointerOrReference { enum { Result = false }; };
 		template <typename U> struct _IsPointerOrReference<U*> { enum { Result = true }; };
 		template <typename U> struct _IsPointerOrReference<U&> { enum { Result = true }; };
 		template <typename U> struct _IsPointerOrReference<U&&> { enum { Result = true }; };
 
-		// Use given type if type is pointer or reference,
-		// otherwise change into reference-type.
+		// Use given type if type is pointer or reference, otherwise change into reference-type.
 		using Type1Ref = typename SECondType<_IsPointerOrReference<T1>::Result, T1, T1&>::Result;
 		using Type2Ref = typename SECondType<_IsPointerOrReference<T2>::Result, T2, const T2&>::Result;
 
@@ -100,5 +100,22 @@ namespace se::Private
 
 	// conditional type definition, if C is true result is T, else U.
 	template <bool C, typename T, typename U> using CondType = typename SECondType<C, T, U>::Result;
+
+	// conditional cast object.
+	// perform static_cast for convertible object (up cast)
+	// perform dynamic_cast for non-convertible object (down cast)
+	template <typename T, typename R, bool IsConvertible> struct SafeCaster;
+	template <typename T, typename R> 
+	struct SafeCaster<T, R, true>
+	{
+		static R* Cast(T* p) { return static_cast<R*>(p); }
+		static const R* Cast(const T* p) { return static_cast<const R*>(p); }
+	};
+	template <typename T, typename R> 
+	struct SafeCaster<T, R, false>
+	{
+		static R* Cast(T* p) { return dynamic_cast<R*>(p); }
+		static const R* Cast(const T* p) { return dynamic_cast<const R*>(p); }
+	};
 
 } // namespace se::Private

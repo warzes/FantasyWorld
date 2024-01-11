@@ -97,6 +97,7 @@
     <ClInclude Include="Object\Private\TypeList.h" />
     <ClInclude Include="Object\Private\Types.h" />
     <ClInclude Include="Object\Private\TypeTraits.h" />
+    <ClInclude Include="Platform\PlatformDefine.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

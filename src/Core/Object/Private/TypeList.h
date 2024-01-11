@@ -164,7 +164,6 @@ namespace se::Private
 				using Result = typename TypeList<T2>::template Append< _Rest >;
 			};
 
-			//using Result = typename _EraseOne<T, Types...>::Result::template Remove<Ts...>;	// error on VS2015
 			using _R = typename _EraseOne<T, Types...>::Result;
 			using Result = typename _R::template Remove<Ts...>;
 		};
@@ -244,7 +243,6 @@ namespace se::Private
 		};
 		template <typename T, typename... Ts> struct _Reverse<T, Ts...>
 		{
-			//using Result = typename _Reverse<Ts...>::Result::template Append<T>;	// error on VS2015
 			using _R = typename _Reverse<Ts...>::Result;
 			using Result = typename _R::template Append<T>;
 		};
@@ -254,55 +252,54 @@ namespace se::Private
 
 		template <template <typename...> class T> using TypesInto = T<Types...>;
 
-		/// reversed list.
+		// reversed list.
 		using Reverse = typename _Reverse<Types...>::Result;
 
-		/// defines type at Index.
+		// defines type at Index.
 		template <int Index> using TypeAt = typename _TypeAt<Index>::Result;
 
-		/// get Index of specific type.
+		// get Index of specific type.
 		template <typename T> constexpr static auto IndexOf() -> int
 		{
 			return _IndexOf<T>::Result;
 		}
 
-		/// count number of given type T in list.
+		// count number of given type T in list.
 		template <typename T> constexpr static auto Count() -> int
 		{
 			return _CountType<T>::Result;
 		}
 
-		/// append types into list.
-		/// @note
-		///   If given arguments contains TypeList<...> with other types,
-		///   the type list (TypeList<...>) will assumed one type.
-		///   (With multiple arguments, type list will not be iterated for each elements.)
+		// append types into list.
+		// @note
+		//	If given arguments contains TypeList<...> with other types,
+		//	the type list (TypeList<...>) will assumed one type.
+		//	(With multiple arguments, type list will not be iterated for each elements.)
 		template <typename... Ts> using Append = typename _Append<Ts...>::Result;
 
-		/// insert specific type at Index.
-		/// TypeList<...> assumed one type. If you need to insert types in other type list,
-		/// you should use Append.
+		// insert specific type at Index.
+		// TypeList<...> assumed one type. If you need to insert types in other type list, you should use Append.
 		template <int Index, typename... Ts> using InsertAt = typename _InsertTypesAt<Index, Ts...>::Result;
 
-		/// check lists are equal.
+		// check lists are equal.
 		template <typename... Ts> constexpr static auto IsSame() -> bool
 		{
-			return _IsSame<Ts...>::Reult;
+			return _IsSame<Ts...>::Result;
 		}
 
-		/// check types in list can be convertible to others.
+		// check types in list can be convertible to others.
 		template <typename... Ts> constexpr static auto IsConvertible() -> bool
 		{
 			return _IsConvertible<Ts...>::Result;
 		}
 
-		/// remove specific types in list.
+		// remove specific types in list.
 		template <typename... Ts> using Remove = typename _Remove<Ts...>::Result;
 
-		/// remove type at Index.
+		// remove type at Index.
 		template <int Index> using RemoveAt = typename _RemoveIndex<Index>::Result;
 
-		/// generate sub list with given range.
+		// generate sub list with given range.
 		template <int Begin, int End> using SubList = typename _SubListT<Begin, End>::Result;
 	};
 } // se::Private

@@ -10,7 +10,7 @@ namespace se
 	class Object
 	{
 	public:
-		using TypeTraits = TypeTraits<T>;
+		using TypeTraits = Private::TypeTraits<T>;
 		static_assert(TypeTraits::IsReference == 0, "Reference type cannot be used!");
 
 
